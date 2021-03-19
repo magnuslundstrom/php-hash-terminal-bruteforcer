@@ -85,7 +85,8 @@ class BruteForcer {
 // Provide the class the algorithm you want to use. See supported algorithms here: https://www.php.net/manual/en/function.hash-algos.php
 $bruteForcer = new BruteForcer('sha256');
 
-$hash_to_attack = 'bc430b5a245cc59c13ffad9ba52d09f21d71d2c39561c1e06da24d43f19d16b6';
+$hash_to_attack = $argv[1];
+
 
 // Provide the attack function the hash you want to attack and the MAXIMUM CHARACTER LENGTH of passwords you want to attack. Remember each char is VERY expensive
 $bruteForcer->attack($hash_to_attack, 15);
