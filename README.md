@@ -5,7 +5,7 @@ Easy to use terminal hash bruteforcer written in php. The consists of the main c
 By default the alogrithm is set to "sha256", but this can be changed from within the file.
 
 How to use? Run this in your terminal (Make sure php is installed):
-php hash.php 7d601f9d20703a97b8cb530538dbbadaa3e4bdfa5f333977e4232f51eebdc47a
+php brute-forcer.php 7d601f9d20703a97b8cb530538dbbadaa3e4bdfa5f333977e4232f51eebdc47a
 
 When you are ready to bruteforce your own passwords, change out the terminal argument provided above.
 
