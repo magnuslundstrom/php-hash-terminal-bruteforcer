@@ -1,7 +1,6 @@
 <?php
 
 # Written by Magnus Lundstrøm 19/03/2021
-
 define('UPPERCASE_LETTERS', range('A', 'Z'));
 define('LOWERCASE_LETTERS', range('a', 'z'));
 define('NUMBERS', range(0, 9));
@@ -11,7 +10,7 @@ define('chars', array_merge(LOWERCASE_LETTERS, UPPERCASE_LETTERS, NUMBERS, SPECI
 // TERMINAL bruteforcer for algoritms supported by PHP hash function
 class BruteForcer {
     public $algorithm;
-    public $hash_to_attack = '';
+    private $hash_to_attack = '';
     private $password_arr = [];
 
     function __construct($algorithm) {
@@ -24,6 +23,7 @@ class BruteForcer {
             $this->iterator($this->password_arr);
             array_push($this->password_arr, chars[0]);
         }
+        echo "\nFound nothing";
         exit(1);
     }
 
@@ -31,36 +31,40 @@ class BruteForcer {
         // Recursive basecase
         if(count($password_arr) == $charIdx) return;
 
-        for($i = 0; $i < count(chars); ++$i) {
+        for($i; $i < count(chars); ++$i) {
+            $this->iterator($password_arr, $charIdx + 1);
 
-            // This will prevent dublications
-            if($charIdx != 0 && $i == 0) continue;
+            // This will prevent dublicate operations
+           if($charIdx != 0 && $i == 0) continue;
+            $this->counter++;
 
             $password_arr[$charIdx] = chars[$i];
             $password_str = implode('', $password_arr);
             $matches = $this->password_validator($password_str);
-
+            
             if($matches) {
-                echo "Password is: $password_str\n";
+                echo "\nThe password is: $password_str\n";
                 exit(0);
             }
-
-            $this->iterator($password_arr, $charIdx + 1);
         }
     }
 
     private function pre_attack_setup($hash_to_attack) {
-        $this->password_arr = [chars[0]];
         $this->hash_to_attack = $hash_to_attack;
+        $this->password_arr = [chars[0]];
     }
+
     
     private function password_validator($password_str) {
         return hash($this->algorithm, $password_str) == $this->hash_to_attack;
     }
 }
 
-// Provide the algorithm you want to use on instantiation. See supported algorithms here: https://www.php.net/manual/en/function.hash-algos.php
+// Provide the class the algorithm you want to use. See supported algorithms here: https://www.php.net/manual/en/function.hash-algos.php
 $bruteForcer = new BruteForcer('sha256');
+
 $hash_to_attack = strtolower($argv[1]);
 
-$bruteForcer->attack($hash_to_attack, 3);
+
+// Provide the attack function the hash you want to attack and the MAXIMUM CHARACTER LENGTH of passwords you want to attack. Remember each char is VERY expensive
+$bruteForcer->attack($hash_to_attack, 8);

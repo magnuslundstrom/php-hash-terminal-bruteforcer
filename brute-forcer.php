@@ -10,27 +10,25 @@ define('chars', array_merge(LOWERCASE_LETTERS, UPPERCASE_LETTERS, NUMBERS, SPECI
 // TERMINAL bruteforcer for algoritms supported by PHP hash function
 class BruteForcer {
     public $algorithm;
-    public $environment;
-    private $start_time = 0;
-    private $counter = 0; // Purely utility
     private $hash_to_attack = '';
     private $password_arr = [];
+    // Utilities
+    private $start_time = 0;
+    private $counter = 0;
 
     function __construct($algorithm) {
         $this->algorithm = $algorithm;
-        $this->password_arr = [chars[0]];
     }
 
     public function attack($hash_to_attack, $max_length) {
-        $this->hash_to_attack = $hash_to_attack;
         $this->count_down($max_length);
+        $this->pre_attack_setup($hash_to_attack);
         while(count($this->password_arr) <= $max_length) {
             $this->iterator($this->password_arr);
             array_push($this->password_arr, chars[0]);
         }
         echo "\nFound nothing... Password may include characters not in chars array or is longer than max_length variable provided." ;
         echo "\nTried $this->counter times and spent " . (time() - $this->start_time) . " seconds.\n";
-        $this->reset();
         exit(1);
     }
 
@@ -58,26 +56,27 @@ class BruteForcer {
         }
     }
 
-    // Reset the object ready for a new attack
-    private function reset() {
+    private function pre_attack_setup($hash_to_attack) {
+        $this->hash_to_attack = $hash_to_attack;
+        $this->password_arr = [chars[0]];
+        // Utilities
         $this->counter = 0;
-        $this->hash_to_attack = '';
-        $this->password_arr = [];
-        $this->start_time = 0;
+        $this->start_time = time();
     }
+
     
     private function password_validator($password_str) {
         return hash($this->algorithm, $password_str) == $this->hash_to_attack;
     }
-
+    
+    // Utility
     private function count_down($max_length) {
-        echo "Starting attempt with " . count(chars);
+        echo "Starting attempt with " . count(chars) . "\n";
         for($i = 2; $i >= 0; --$i) {
             echo "Starting in: $i\n";
             sleep(1);
         }
         echo "\n";
-        $this->start_time = time();
     }
 }
 
@@ -88,4 +87,4 @@ $hash_to_attack = strtolower($argv[1]);
 
 
 // Provide the attack function the hash you want to attack and the MAXIMUM CHARACTER LENGTH of passwords you want to attack. Remember each char is VERY expensive
-$bruteForcer->attack($hash_to_attack, 3);
+$bruteForcer->attack($hash_to_attack, 8);
