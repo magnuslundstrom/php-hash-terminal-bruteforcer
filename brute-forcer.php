@@ -11,7 +11,6 @@ define('chars', array_merge(LOWERCASE_LETTERS, UPPERCASE_LETTERS, NUMBERS, SPECI
 // TERMINAL bruteforcer for algoritms supported by PHP hash function
 class BruteForcer {
     public $algorithm;
-    public $environment;
     private $start_time = 0;
     private $counter = 0; // Purely utility
     private $hash_to_attack = '';
@@ -24,6 +23,7 @@ class BruteForcer {
 
     public function attack($hash_to_attack, $max_length) {
         $this->hash_to_attack = $hash_to_attack;
+        $this->reset();
         $this->count_down($max_length);
         while(count($this->password_arr) <= $max_length) {
             $this->iterator($this->password_arr);
@@ -31,7 +31,6 @@ class BruteForcer {
         }
         echo "\nFound nothing... Password may include characters not in chars array or is longer than max_length variable provided." ;
         echo "\nTried $this->counter times and spent " . (time() - $this->start_time) . " seconds.\n";
-        $this->reset();
     }
 
     private function iterator($password_arr, $charIdx = 0) {
@@ -63,7 +62,7 @@ class BruteForcer {
     private function reset() {
         $this->counter = 0;
         $this->hash_to_attack = '';
-        $this->pwArr = [];
+        $this->password_arr = [chars[0]];
         $this->start_time = 0;
     }
     
