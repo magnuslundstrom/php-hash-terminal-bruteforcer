@@ -45,7 +45,7 @@ class BruteForcer {
 
             $password_arr[$charIdx] = chars[$i];
             $password_str = implode('', $password_arr);
-            echo $password_str . "\n"; // Can be removed but looks pretty sick in the terminal not gonna lie
+            echo $password_str; // Can be removed but looks pretty sick in the terminal not gonna lie
             $matches = $this->password_validator($password_str);
             
             if($matches) {
